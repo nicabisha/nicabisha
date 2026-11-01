@@ -7,8 +7,7 @@
 - Discord bots
 - Machine learning models
 
-## Here are my favorite characters!
+## Here is my favorite character!
 <p align="center">
   <img src="https://github.com/nicabisha/nicabisha/blob/main/Kanna_2014.webp" width="300" />
-  <img src="https://github.com/nicabisha/nicabisha/blob/main/Erwin.png" width="300" />
 </p>
