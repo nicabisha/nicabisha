@@ -2,7 +2,7 @@
 - 🌱 I'm currently learning!
 - 📫 Reach me: nicabisha@gmail.com
 
-## Here are stuff i like making:
+## Here are stuff i like making
 - Automation tools for my daily work
 - Discord bots
 - Machine learning models
