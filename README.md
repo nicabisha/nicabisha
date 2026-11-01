@@ -9,5 +9,5 @@
 
 ## Here is my favorite character from my favorite mangaka
 <p align="center">
-  <img src="" width="" />
+  <img src="https://github.com/nicabisha/nicabisha/blob/main/umino.png" width="300" />
 </p>
