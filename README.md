@@ -3,7 +3,7 @@
 - 📫 Reach me: nicabisha@gmail.com
 
 ## Here are stuff i like making!
-- Automation tools for my daily work
+- Automation tools
 - Discord bots
 - Machine learning models
 
