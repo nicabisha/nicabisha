@@ -1,4 +1,4 @@
-## Haiii there ^_^ !!!
+## Haiii!!! ^_^
 - 🌱 I'm currently learning!
 - 📫 Reach me: nicabisha@gmail.com
 
