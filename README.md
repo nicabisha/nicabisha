@@ -4,8 +4,8 @@
     Most projects here are for my daily tasks, but feel free to look!
   </samp><br><br>
   <!-- rotate:start -->
-    <img src="images/Celeste_character_Madeline.webp" width="300" alt="Daily Profile Picture" />
-  <!-- rotate:end --><br><br>
+  <img src="images/Kanna_2014.webp" width="300" alt="Daily Profile Picture" />
+<!-- rotate:end --><br><br>
   <samp>
     This picture changes every day.<br>
     I'm currently learning, so expect a bunch of slop >_<
