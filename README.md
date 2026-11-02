@@ -1,6 +1,6 @@
 <p align="center">
   <samp>Hai!!! ^_^<br>
-    I'm Abi, and this is where i my projects.<br>
+    I'm Abi, and this is where i keep my projects.<br>
     Most projects here are for my daily tasks, but feel free to look!
   </samp><br><br>
   <!-- rotate:start -->
