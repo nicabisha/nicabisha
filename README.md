@@ -1,4 +1,4 @@
-<p style="font-size: 20px; text-align: center;">
+<p align="center">
   <samp>Hai!!! ^_^<br>
     I'm Abi, and this is where i my projects.<br>
     Most projects here are for my daily tasks, but feel free to look!
