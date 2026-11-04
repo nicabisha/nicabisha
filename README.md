@@ -7,7 +7,7 @@
   <img src="images/Celeste_character_Madeline.webp" width="300" alt="Daily Profile Picture" />
 <!-- rotate:end --><br><br>
   <samp>
-    This picture changes every day.<br>
-    I'm currently learning, so expect a bunch of slop >_<
+    This picture changes at midnight UTC.<br>
+    I'm currently learning, so expect lots of slop >_<
   </samp>
 </p>
