@@ -13,5 +13,5 @@
 </p>
 
 <p align="center">
-  <img src="images/language-distribution.svg" width="440" alt="Language distribution across all my repos" />
+  <img src="images/language-distribution.svg?v=2" width="440" alt="Language distribution across all my repos" />
 </p>
