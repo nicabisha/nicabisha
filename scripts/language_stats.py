@@ -113,54 +113,60 @@ def fallback_svg(message):
     )
 
 
-def donut_svg(rankings, colors, repo_count):
-    width, height = 560, 320
-    cx, cy, radius, stroke = 130, 192, 72, 32
-    circumference = 2 * math.pi * radius
+def stacked_bar_svg(rankings, colors, repo_count):
+    width, pad = 560, 20
+    bar_y, bar_h = 84, 10
+    bar_w = width - 2 * pad
     today = datetime.now(timezone.utc).strftime("%b %d, %Y")
 
     def color_of(name):
         return colors.get(name, "#8b949e")
 
-    # Donut slices: each circle's dash pattern draws its segment; negative
-    # stroke-dashoffset places it after all previous ones. Rotated -90deg so
-    # the chart starts at 12 o'clock.
-    slices, acc = [], 0.0
+    # Language bar: proportional segments drawn inside a rounded clip path, so
+    # the ends of the bar are rounded but the edges between languages stay
+    # square - the same look as the language bar on GitHub repo pages.
+    segments, acc = [], 0.0
     for i, (name, frac) in enumerate(rankings):
-        seg = circumference * frac
+        seg = bar_w * frac
         if i == len(rankings) - 1:
-            seg = circumference * (1 - acc)  # last slice absorbs rounding gaps
-        slices.append(
-            f'<circle cx="{cx}" cy="{cy}" r="{radius}" fill="none" '
-            f'stroke="{color_of(name)}" stroke-width="{stroke}" '
-            f'stroke-dasharray="{seg:.2f} {circumference - seg:.2f}" '
-            f'stroke-dashoffset="{-circumference * acc:.2f}" />'
+            seg = bar_w * (1 - acc)  # last segment absorbs rounding gaps
+        segments.append(
+            f'<rect x="{pad + bar_w * acc:.2f}" y="{bar_y}" width="{seg:.2f}" '
+            f'height="{bar_h}" fill="{color_of(name)}" />'
         )
         acc += frac
 
+    # Legend: dot + name + percentage, wrapping three entries per row.
+    per_row, row_h = 3, 24
+    rows = math.ceil(len(rankings) / per_row)
+    legend_top = bar_y + bar_h + 30
+    height = legend_top + rows * row_h + 6
+
     legend = []
-    y = 92
-    for name, frac in rankings:
-        legend.append(f'<circle cx="258" cy="{y - 5}" r="6" fill="{color_of(name)}" />')
+    for i, (name, frac) in enumerate(rankings):
+        col, row = i % per_row, i // per_row
+        x = pad + col * (bar_w / per_row)
+        y = legend_top + row * row_h
         legend.append(
-            f'<text class="t" x="272" y="{y}" font-size="14">{html.escape(name)}</text>'
+            f'<circle cx="{x + 5:.0f}" cy="{y - 4}" r="5" fill="{color_of(name)}" />'
         )
         legend.append(
-            f'<text class="t" x="530" y="{y}" font-size="14" text-anchor="end" '
-            f'opacity="0.75">{frac * 100:.1f}%</text>'
+            f'<text class="t" x="{x + 17:.0f}" y="{y}" font-size="13">'
+            f'{html.escape(name)} <tspan opacity="0.65">{frac * 100:.1f}%</tspan></text>'
         )
-        y += 26
 
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" role="img" '
         f'aria-label="Language distribution across {repo_count} repositories">\n'
         f"  <style>{CSS}</style>\n"
-        f'  <text class="t" x="20" y="36" font-size="20" font-weight="700">'
+        f'  <clipPath id="bar-clip"><rect x="{pad}" y="{bar_y}" width="{bar_w}" '
+        f'height="{bar_h}" rx="{bar_h / 2}" /></clipPath>\n'
+        f'  <text class="t" x="{pad}" y="36" font-size="20" font-weight="700">'
         f"Language Distribution</text>\n"
-        f'  <text class="t" x="20" y="58" font-size="12" opacity="0.6">'
+        f'  <text class="t" x="{pad}" y="58" font-size="12" opacity="0.6">'
         f"across {repo_count} repos &#183; updated {today}</text>\n"
-        f'  <g transform="rotate(-90 {cx} {cy})">\n    ' + "\n    ".join(slices) + "\n  </g>\n"
+        f'  <g clip-path="url(#bar-clip)">\n    ' + "\n    ".join(segments) + "\n  </g>\n"
         + "\n".join(f"  {line}" for line in legend)
         + "\n</svg>\n"
     )
@@ -179,7 +185,7 @@ def main():
     totals, colors, repo_count = collect(token)
     rankings = rank(totals)
     svg = (
-        donut_svg(rankings, colors, repo_count)
+        stacked_bar_svg(rankings, colors, repo_count)
         if rankings
         else fallback_svg("No language data found across your repos yet.")
     )
