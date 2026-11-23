@@ -34,7 +34,7 @@ query($after: String) {
 """
 
 CSS = """
-text { font-family: 'Segoe UI', Ubuntu, 'Helvetica Neue', sans-serif; }
+text { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; }
 .t { fill: #1f2328; }
 @media (prefers-color-scheme: dark) { .t { fill: #e6edf3; } }
 """
@@ -114,7 +114,7 @@ def fallback_svg(message):
 
 def stacked_bar_svg(rankings, colors, repo_count):
     width, pad = 560, 20
-    bar_y, bar_h = 64, 10
+    bar_y, bar_h = 24, 10
     bar_w = width - 2 * pad
 
     def color_of(name):
@@ -160,8 +160,6 @@ def stacked_bar_svg(rankings, colors, repo_count):
         f"  <style>{CSS}</style>\n"
         f'  <clipPath id="bar-clip"><rect x="{pad}" y="{bar_y}" width="{bar_w}" '
         f'height="{bar_h}" rx="{bar_h / 2}" /></clipPath>\n'
-        f'  <text class="t" x="{width // 2}" y="36" text-anchor="middle" '
-        f'font-size="20" font-weight="700">Language Distribution</text>\n'
         f'  <g clip-path="url(#bar-clip)">\n    ' + "\n    ".join(segments) + "\n  </g>\n"
         + "\n".join(f"  {line}" for line in legend)
         + "\n</svg>\n"
