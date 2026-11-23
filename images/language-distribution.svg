@@ -4,9 +4,7 @@ text { font-family: 'Segoe UI', Ubuntu, 'Helvetica Neue', sans-serif; }
 .t { fill: #1f2328; }
 @media (prefers-color-scheme: dark) { .t { fill: #e6edf3; } }
 </style>
-  <text class="t" x="20" y="36" font-size="20" font-weight="700">Language Distribution</text>
-  <text class="t" x="20" y="58" font-size="12" opacity="0.6">across 11 repos &#183; updated Nov 23, 2026</text>
-  <g transform="rotate(-90 130 192)">
+  <text class="t" x="20" y="36" font-size="20" font-weight="700">  <g transform="rotate(-90 130 192)">
     <circle cx="130" cy="192" r="72" fill="none" stroke="#DA5B0B" stroke-width="32" stroke-dasharray="219.06 233.33" stroke-dashoffset="-0.00" />
     <circle cx="130" cy="192" r="72" fill="none" stroke="#3178c6" stroke-width="32" stroke-dasharray="102.22 350.17" stroke-dashoffset="-219.06" />
     <circle cx="130" cy="192" r="72" fill="none" stroke="#000080" stroke-width="32" stroke-dasharray="55.83 396.56" stroke-dashoffset="-321.27" />
