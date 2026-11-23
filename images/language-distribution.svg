@@ -1,38 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="560" height="182" viewBox="0 0 560 182" role="img" aria-label="Language distribution across 11 repositories">
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="142" viewBox="0 0 560 142" role="img" aria-label="Language distribution across 11 repositories">
   <style>
-text { font-family: 'Segoe UI', Ubuntu, 'Helvetica Neue', sans-serif; }
+text { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; }
 .t { fill: #1f2328; }
 @media (prefers-color-scheme: dark) { .t { fill: #e6edf3; } }
 </style>
-  <clipPath id="bar-clip"><rect x="20" y="64" width="520" height="10" rx="5.0" /></clipPath>
-  <text class="t" x="280" y="36" text-anchor="middle" font-size="20" font-weight="700">Language Distribution</text>
+  <clipPath id="bar-clip"><rect x="20" y="24" width="520" height="10" rx="5.0" /></clipPath>
   <g clip-path="url(#bar-clip)">
-    <rect x="20.00" y="64" width="251.29" height="10" fill="#DA5B0B" />
-    <rect x="271.29" y="64" width="117.26" height="10" fill="#3178c6" />
-    <rect x="388.55" y="64" width="64.10" height="10" fill="#000080" />
-    <rect x="452.65" y="64" width="33.39" height="10" fill="#3572A5" />
-    <rect x="486.03" y="64" width="32.48" height="10" fill="#3D6117" />
-    <rect x="518.52" y="64" width="7.19" height="10" fill="#f1e05a" />
-    <rect x="525.70" y="64" width="5.87" height="10" fill="#8b949e" />
-    <rect x="531.57" y="64" width="4.76" height="10" fill="#427819" />
-    <rect x="536.33" y="64" width="3.67" height="10" fill="#8b949e" />
+    <rect x="20.00" y="24" width="251.29" height="10" fill="#DA5B0B" />
+    <rect x="271.29" y="24" width="117.26" height="10" fill="#3178c6" />
+    <rect x="388.55" y="24" width="64.10" height="10" fill="#000080" />
+    <rect x="452.65" y="24" width="33.39" height="10" fill="#3572A5" />
+    <rect x="486.03" y="24" width="32.48" height="10" fill="#3D6117" />
+    <rect x="518.52" y="24" width="7.19" height="10" fill="#f1e05a" />
+    <rect x="525.70" y="24" width="5.87" height="10" fill="#8b949e" />
+    <rect x="531.57" y="24" width="4.76" height="10" fill="#427819" />
+    <rect x="536.33" y="24" width="3.67" height="10" fill="#8b949e" />
   </g>
-  <circle cx="25" cy="100" r="5" fill="#DA5B0B" />
-  <text class="t" x="37" y="104" font-size="13">Jupyter Notebook <tspan opacity="0.65">48.3%</tspan></text>
-  <circle cx="198" cy="100" r="5" fill="#3178c6" />
-  <text class="t" x="210" y="104" font-size="13">TypeScript <tspan opacity="0.65">22.5%</tspan></text>
-  <circle cx="372" cy="100" r="5" fill="#000080" />
-  <text class="t" x="384" y="104" font-size="13">Lua <tspan opacity="0.65">12.3%</tspan></text>
-  <circle cx="25" cy="124" r="5" fill="#3572A5" />
-  <text class="t" x="37" y="128" font-size="13">Python <tspan opacity="0.65">6.4%</tspan></text>
-  <circle cx="198" cy="124" r="5" fill="#3D6117" />
-  <text class="t" x="210" y="128" font-size="13">TeX <tspan opacity="0.65">6.2%</tspan></text>
-  <circle cx="372" cy="124" r="5" fill="#f1e05a" />
-  <text class="t" x="384" y="128" font-size="13">JavaScript <tspan opacity="0.65">1.4%</tspan></text>
-  <circle cx="25" cy="148" r="5" fill="#8b949e" />
-  <text class="t" x="37" y="152" font-size="13">BibTeX Style <tspan opacity="0.65">1.1%</tspan></text>
-  <circle cx="198" cy="148" r="5" fill="#427819" />
-  <text class="t" x="210" y="152" font-size="13">Makefile <tspan opacity="0.65">0.9%</tspan></text>
-  <circle cx="372" cy="148" r="5" fill="#8b949e" />
-  <text class="t" x="384" y="152" font-size="13">Other <tspan opacity="0.65">0.7%</tspan></text>
+  <circle cx="25" cy="60" r="5" fill="#DA5B0B" />
+  <text class="t" x="37" y="64" font-size="13">Jupyter Notebook <tspan opacity="0.65">48.3%</tspan></text>
+  <circle cx="198" cy="60" r="5" fill="#3178c6" />
+  <text class="t" x="210" y="64" font-size="13">TypeScript <tspan opacity="0.65">22.5%</tspan></text>
+  <circle cx="372" cy="60" r="5" fill="#000080" />
+  <text class="t" x="384" y="64" font-size="13">Lua <tspan opacity="0.65">12.3%</tspan></text>
+  <circle cx="25" cy="84" r="5" fill="#3572A5" />
+  <text class="t" x="37" y="88" font-size="13">Python <tspan opacity="0.65">6.4%</tspan></text>
+  <circle cx="198" cy="84" r="5" fill="#3D6117" />
+  <text class="t" x="210" y="88" font-size="13">TeX <tspan opacity="0.65">6.2%</tspan></text>
+  <circle cx="372" cy="84" r="5" fill="#f1e05a" />
+  <text class="t" x="384" y="88" font-size="13">JavaScript <tspan opacity="0.65">1.4%</tspan></text>
+  <circle cx="25" cy="108" r="5" fill="#8b949e" />
+  <text class="t" x="37" y="112" font-size="13">BibTeX Style <tspan opacity="0.65">1.1%</tspan></text>
+  <circle cx="198" cy="108" r="5" fill="#427819" />
+  <text class="t" x="210" y="112" font-size="13">Makefile <tspan opacity="0.65">0.9%</tspan></text>
+  <circle cx="372" cy="108" r="5" fill="#8b949e" />
+  <text class="t" x="384" y="112" font-size="13">Other <tspan opacity="0.65">0.7%</tspan></text>
 </svg>
