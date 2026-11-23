@@ -157,9 +157,6 @@ def donut_svg(rankings, colors, repo_count):
         f'aria-label="Language distribution across {repo_count} repositories">\n'
         f"  <style>{CSS}</style>\n"
         f'  <text class="t" x="20" y="36" font-size="20" font-weight="700">'
-        f"Language Distribution</text>\n"
-        f'  <text class="t" x="20" y="58" font-size="12" opacity="0.6">'
-        f"across {repo_count} repos &#183; updated {today}</text>\n"
         f'  <g transform="rotate(-90 {cx} {cy})">\n    ' + "\n    ".join(slices) + "\n  </g>\n"
         + "\n".join(f"  {line}" for line in legend)
         + "\n</svg>\n"
