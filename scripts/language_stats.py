@@ -11,7 +11,6 @@ import json
 import math
 import os
 import urllib.request
-from datetime import datetime, timezone
 from pathlib import Path
 
 API_URL = "https://api.github.com/graphql"
@@ -115,9 +114,8 @@ def fallback_svg(message):
 
 def stacked_bar_svg(rankings, colors, repo_count):
     width, pad = 560, 20
-    bar_y, bar_h = 84, 10
+    bar_y, bar_h = 64, 10
     bar_w = width - 2 * pad
-    today = datetime.now(timezone.utc).strftime("%b %d, %Y")
 
     def color_of(name):
         return colors.get(name, "#8b949e")
@@ -162,10 +160,8 @@ def stacked_bar_svg(rankings, colors, repo_count):
         f"  <style>{CSS}</style>\n"
         f'  <clipPath id="bar-clip"><rect x="{pad}" y="{bar_y}" width="{bar_w}" '
         f'height="{bar_h}" rx="{bar_h / 2}" /></clipPath>\n'
-        f'  <text class="t" x="{pad}" y="36" font-size="20" font-weight="700">'
-        f"Language Distribution</text>\n"
-        f'  <text class="t" x="{pad}" y="58" font-size="12" opacity="0.6">'
-        f"across {repo_count} repos &#183; updated {today}</text>\n"
+        f'  <text class="t" x="{width // 2}" y="36" text-anchor="middle" '
+        f'font-size="20" font-weight="700">Language Distribution</text>\n'
         f'  <g clip-path="url(#bar-clip)">\n    ' + "\n    ".join(segments) + "\n  </g>\n"
         + "\n".join(f"  {line}" for line in legend)
         + "\n</svg>\n"
