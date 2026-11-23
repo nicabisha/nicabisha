@@ -1,0 +1,32 @@
+name: Update language stats
+
+on:
+  schedule:
+    - cron: "10 0 * * *" # Daily at 00:10 UTC (offset from the image rotation job so pushes don't race)
+  workflow_dispatch: # Allows you to manually trigger it from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  language-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Generate language distribution
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }} # Fine-grained token: all repos, Metadata read-only
+        run: python scripts/language_stats.py
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update language distribution chart"
+          file_pattern: images/language-distribution.svg
