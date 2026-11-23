@@ -113,7 +113,7 @@ def fallback_svg(message):
 
 
 def stacked_bar_svg(rankings, colors, repo_count):
-    width, pad = 560, 20
+    width, pad = 800, 20
     bar_y, bar_h = 24, 10
     bar_w = width - 2 * pad
 
@@ -134,13 +134,8 @@ def stacked_bar_svg(rankings, colors, repo_count):
         )
         acc += frac
 
-    # Legend: dot + name + percentage. Monospace glyphs are ~0.62em wide, so
-    # the longest label dictates how many columns fit without overlapping.
-    char_w = 13 * 0.62
-    longest = max(len(name) for name, _ in rankings)
-    entry_w = 17 + (longest + 7) * char_w  # 17px dot gap + "xx.x%" suffix
-    per_row = max(1, min(3, int(bar_w // entry_w)))
-    row_h = 24
+    # Legend: dot + name + percentage, three entries per row.
+    per_row, row_h = 3, 24
     rows = math.ceil(len(rankings) / per_row)
     legend_top = bar_y + bar_h + 30
     height = legend_top + rows * row_h + 6
