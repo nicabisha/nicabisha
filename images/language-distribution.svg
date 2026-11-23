@@ -7,26 +7,26 @@ text { font-family: 'Segoe UI', Ubuntu, 'Helvetica Neue', sans-serif; }
   <clipPath id="bar-clip"><rect x="20" y="64" width="520" height="10" rx="5.0" /></clipPath>
   <text class="t" x="280" y="36" text-anchor="middle" font-size="20" font-weight="700">Language Distribution</text>
   <g clip-path="url(#bar-clip)">
-    <rect x="20.00" y="64" width="251.77" height="10" fill="#DA5B0B" />
-    <rect x="271.77" y="64" width="117.48" height="10" fill="#3178c6" />
-    <rect x="389.25" y="64" width="64.22" height="10" fill="#000080" />
-    <rect x="453.47" y="64" width="32.55" height="10" fill="#3D6117" />
-    <rect x="486.02" y="64" width="32.46" height="10" fill="#3572A5" />
-    <rect x="518.48" y="64" width="7.20" height="10" fill="#f1e05a" />
-    <rect x="525.68" y="64" width="5.88" height="10" fill="#8b949e" />
-    <rect x="531.56" y="64" width="4.77" height="10" fill="#427819" />
-    <rect x="536.32" y="64" width="3.68" height="10" fill="#8b949e" />
+    <rect x="20.00" y="64" width="251.29" height="10" fill="#DA5B0B" />
+    <rect x="271.29" y="64" width="117.26" height="10" fill="#3178c6" />
+    <rect x="388.55" y="64" width="64.10" height="10" fill="#000080" />
+    <rect x="452.65" y="64" width="33.39" height="10" fill="#3572A5" />
+    <rect x="486.03" y="64" width="32.48" height="10" fill="#3D6117" />
+    <rect x="518.52" y="64" width="7.19" height="10" fill="#f1e05a" />
+    <rect x="525.70" y="64" width="5.87" height="10" fill="#8b949e" />
+    <rect x="531.57" y="64" width="4.76" height="10" fill="#427819" />
+    <rect x="536.33" y="64" width="3.67" height="10" fill="#8b949e" />
   </g>
   <circle cx="25" cy="100" r="5" fill="#DA5B0B" />
-  <text class="t" x="37" y="104" font-size="13">Jupyter Notebook <tspan opacity="0.65">48.4%</tspan></text>
+  <text class="t" x="37" y="104" font-size="13">Jupyter Notebook <tspan opacity="0.65">48.3%</tspan></text>
   <circle cx="198" cy="100" r="5" fill="#3178c6" />
-  <text class="t" x="210" y="104" font-size="13">TypeScript <tspan opacity="0.65">22.6%</tspan></text>
+  <text class="t" x="210" y="104" font-size="13">TypeScript <tspan opacity="0.65">22.5%</tspan></text>
   <circle cx="372" cy="100" r="5" fill="#000080" />
   <text class="t" x="384" y="104" font-size="13">Lua <tspan opacity="0.65">12.3%</tspan></text>
-  <circle cx="25" cy="124" r="5" fill="#3D6117" />
-  <text class="t" x="37" y="128" font-size="13">TeX <tspan opacity="0.65">6.3%</tspan></text>
-  <circle cx="198" cy="124" r="5" fill="#3572A5" />
-  <text class="t" x="210" y="128" font-size="13">Python <tspan opacity="0.65">6.2%</tspan></text>
+  <circle cx="25" cy="124" r="5" fill="#3572A5" />
+  <text class="t" x="37" y="128" font-size="13">Python <tspan opacity="0.65">6.4%</tspan></text>
+  <circle cx="198" cy="124" r="5" fill="#3D6117" />
+  <text class="t" x="210" y="128" font-size="13">TeX <tspan opacity="0.65">6.2%</tspan></text>
   <circle cx="372" cy="124" r="5" fill="#f1e05a" />
   <text class="t" x="384" y="128" font-size="13">JavaScript <tspan opacity="0.65">1.4%</tspan></text>
   <circle cx="25" cy="148" r="5" fill="#8b949e" />
