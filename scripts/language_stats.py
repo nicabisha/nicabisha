@@ -17,6 +17,8 @@ API_URL = "https://api.github.com/graphql"
 OUTPUT = Path("images/language-distribution.svg")
 TOP_N = 8          # languages shown individually; the rest collapse into "Other"
 MIN_SLICE = 0.005  # languages under 0.5% get folded into "Other"
+CHAR_W = 9.6       # 0.6em advance width of the legend's monospace stack
+FIT_MARGIN = 8     # breathing room before a legend column ends
 
 QUERY = """
 query($after: String) {
@@ -101,21 +103,36 @@ def rank(totals):
     return shown
 
 
+def fit_name(name, pct_str, col_w):
+    """Truncate a name so 'name pct' fits its column (word boundary first)."""
+    budget = int((col_w - 18 - FIT_MARGIN) / CHAR_W)  # 18 = dot + gap before text
+    max_name = budget - len(pct_str) - 1  # 1 for the separating space
+    if len(name) <= max_name:
+        return name
+    cut = name[: max_name - 1].rstrip()  # room for the ellipsis
+    if " " in cut:
+        cut = cut[: cut.rindex(" ")].rstrip()
+    return cut.rstrip(" .,;:-") + "…"
+
+
 def fallback_svg(message):
     return (
-        '<svg xmlns="http://www.w3.org/2000/svg" width="560" height="320" '
-        'viewBox="0 0 560 320" role="img">\n'
+        '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="320" '
+        'viewBox="0 0 600 320" role="img">\n'
         f"  <style>{CSS}</style>\n"
-        f'  <text class="t" x="280" y="165" text-anchor="middle" font-size="14" '
+        f'  <text class="t" x="300" y="165" text-anchor="middle" font-size="16" '
         f'opacity="0.7">{html.escape(message)}</text>\n'
         "</svg>\n"
     )
 
 
 def stacked_bar_svg(rankings, colors, repo_count):
-    width, pad = 800, 20
-    bar_y, bar_h = 24, 10
+    # Displayed at width=600 in the README; keep them equal so 1 SVG px = 1
+    # CSS px and the 16px legend text matches the README's font size exactly.
+    width, pad = 600, 20
+    bar_y, bar_h = 24, 12
     bar_w = width - 2 * pad
+    font_size = 16
 
     def color_of(name):
         return colors.get(name, "#8b949e")
@@ -135,22 +152,24 @@ def stacked_bar_svg(rankings, colors, repo_count):
         acc += frac
 
     # Legend: dot + name + percentage, three entries per row.
-    per_row, row_h = 3, 24
+    per_row, row_h = 3, 28
     rows = math.ceil(len(rankings) / per_row)
-    legend_top = bar_y + bar_h + 30
+    legend_top = bar_y + bar_h + 34
     height = legend_top + rows * row_h + 6
 
     legend = []
     for i, (name, frac) in enumerate(rankings):
+        pct_str = f"{frac * 100:.1f}%"
         col, row = i % per_row, i // per_row
         x = pad + col * (bar_w / per_row)
         y = legend_top + row * row_h
         legend.append(
-            f'<circle cx="{x + 5:.0f}" cy="{y - 4}" r="5" fill="{color_of(name)}" />'
+            f'<circle cx="{x + 6:.0f}" cy="{y - 5}" r="6" fill="{color_of(name)}" />'
         )
         legend.append(
-            f'<text class="t" x="{x + 17:.0f}" y="{y}" font-size="13">'
-            f'{html.escape(name)} <tspan opacity="0.65">{frac * 100:.1f}%</tspan></text>'
+            f'<text class="t" x="{x + 18:.0f}" y="{y}" font-size="{font_size}">'
+            f'{html.escape(fit_name(name, pct_str, bar_w / per_row))} '
+            f'<tspan opacity="0.65">{pct_str}</tspan></text>'
         )
 
     return (
