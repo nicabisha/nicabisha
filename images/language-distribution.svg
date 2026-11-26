@@ -6,20 +6,20 @@ text { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'L
 </style>
   <clipPath id="bar-clip"><rect x="20" y="24" width="560" height="10" rx="5.0" /></clipPath>
   <g clip-path="url(#bar-clip)">
-    <rect x="20.00" y="24" width="270.63" height="10" fill="#DA5B0B" />
-    <rect x="290.63" y="24" width="126.28" height="10" fill="#3178c6" />
-    <rect x="416.91" y="24" width="69.03" height="10" fill="#000080" />
-    <rect x="485.94" y="24" width="35.94" height="10" fill="#3572A5" />
-    <rect x="521.88" y="24" width="34.98" height="10" fill="#3D6117" />
-    <rect x="556.86" y="24" width="7.74" height="10" fill="#f1e05a" />
-    <rect x="564.60" y="24" width="6.32" height="10" fill="#8b949e" />
-    <rect x="570.92" y="24" width="5.12" height="10" fill="#427819" />
+    <rect x="20.00" y="24" width="270.56" height="10" fill="#DA5B0B" />
+    <rect x="290.56" y="24" width="126.25" height="10" fill="#3178c6" />
+    <rect x="416.80" y="24" width="69.01" height="10" fill="#000080" />
+    <rect x="485.81" y="24" width="36.09" height="10" fill="#3572A5" />
+    <rect x="521.90" y="24" width="34.97" height="10" fill="#3D6117" />
+    <rect x="556.87" y="24" width="7.74" height="10" fill="#f1e05a" />
+    <rect x="564.61" y="24" width="6.32" height="10" fill="#8b949e" />
+    <rect x="570.93" y="24" width="5.12" height="10" fill="#427819" />
     <rect x="576.05" y="24" width="3.95" height="10" fill="#8b949e" />
   </g>
   <circle cx="26" cy="57.5" r="4.5" fill="#DA5B0B" />
   <text class="t" x="35" y="62" font-size="11.9">Jupyter Notebook <tspan opacity="0.65">48.3%</tspan></text>
   <circle cx="213" cy="57.5" r="4.5" fill="#3178c6" />
-  <text class="t" x="222" y="62" font-size="11.9">TypeScript <tspan opacity="0.65">22.6%</tspan></text>
+  <text class="t" x="222" y="62" font-size="11.9">TypeScript <tspan opacity="0.65">22.5%</tspan></text>
   <circle cx="399" cy="57.5" r="4.5" fill="#000080" />
   <text class="t" x="408" y="62" font-size="11.9">Lua <tspan opacity="0.65">12.3%</tspan></text>
   <circle cx="26" cy="79.5" r="4.5" fill="#3572A5" />
