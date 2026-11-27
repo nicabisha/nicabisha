@@ -127,13 +127,14 @@ def render_ascii(rankings, repo_count):
 
 
 def frame(lines):
-    """Wrap chart lines in a heavy box-drawing frame."""
-    inner = max(len(line) for line in lines)
-    return (
-        ["┏" + "━" * (inner + 2) + "┓"]
-        + [f"┃ {line:<{inner}} ┃" for line in lines]
-        + ["┗" + "━" * (inner + 2) + "┛"]
-    )
+    """Cap the chart with heavy horizontal rules.
+
+    Vertical borders are not an option: stacked glyphs render dashed,
+    because the line spacing between rows (which README HTML cannot set)
+    breaks every vertical stroke. Horizontal glyph runs connect seamlessly.
+    """
+    rule = "━" * max(len(line) for line in lines)
+    return [rule] + lines + [rule]
 
 
 def write_readme(lines):
