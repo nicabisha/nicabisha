@@ -136,17 +136,16 @@ def write_readme(lines):
             "the chart should go:\n"
             "  <!-- stats:start -->\n  <!-- stats:end -->"
         )
-    # A bare <pre> gets the same styling as a fenced code block, but unlike a
-    # fence it stays inside the centered <div>. Rows are all the same width,
-    # so centering shifts them uniformly and the columns stay aligned.
-    chart = "\n".join(html.escape(line) for line in lines)
+    # Borderless variant: centered <samp> text art, same font as the greeting,
+    # no code-box around it. Spaces must be &nbsp; or HTML collapses them and
+    # the columns lose alignment; lines are joined on one source line so no
+    # stray whitespace can sneak between rows.
+    chart = "<br>".join(html.escape(line).replace(" ", "&nbsp;") for line in lines)
     block = (
         "<!-- stats:start -->\n"
-        '<div align="center">\n'
-        "<pre>\n"
-        f"{chart}\n"
-        "</pre>\n"
-        "</div>\n"
+        '<p align="center">\n'
+        f"  <samp>{chart}</samp>\n"
+        "</p>\n"
         "<!-- stats:end -->\n"
     )
     README.write_text(
