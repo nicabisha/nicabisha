@@ -4,7 +4,7 @@
     Most projects here are for my daily tasks, but feel free to look!
   </samp><br><br>
   <!-- rotate:start -->
-  <img src="images/Celeste_character_Madeline.webp" width="300" alt="Daily Profile Picture" />
+  <img src="images/HK.webp" width="300" alt="Daily Profile Picture" />
 <!-- rotate:end --><br><br>
   <samp>
     This picture changes at midnight UTC.<br>
