@@ -126,6 +126,16 @@ def render_ascii(rankings, repo_count):
     return lines
 
 
+def frame(lines):
+    """Wrap chart lines in a heavy box-drawing frame."""
+    inner = max(len(line) for line in lines)
+    return (
+        ["┏" + "━" * (inner + 2) + "┓"]
+        + [f"┃ {line:<{inner}} ┃" for line in lines]
+        + ["┗" + "━" * (inner + 2) + "┛"]
+    )
+
+
 def write_readme(lines):
     """Replace the text between the stats markers in README.md."""
     readme = README.read_text(encoding="utf-8")
@@ -177,7 +187,7 @@ def main():
 
     totals, repo_count = collect(token, args.include_private)
     rankings = rank(totals)
-    write_readme(render_ascii(rankings, repo_count))
+    write_readme(frame(render_ascii(rankings, repo_count)))
 
     scope = "all repos" if args.include_private else "public repos only"
     print(f"Updated {README} ({repo_count} {scope}, {len(rankings)} languages)")
