@@ -33,7 +33,7 @@ def main():
 
     block = (
         "<!-- rotate:start -->\n"
-        f'  <img src="images/{chosen}" width="300" alt="Daily Profile Picture" />\n'
+        f'  <img src="images/{chosen}" height="180" alt="Daily Profile Picture" />\n'
         "<!-- rotate:end -->"
     )
 
