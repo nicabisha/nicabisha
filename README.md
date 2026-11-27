@@ -13,8 +13,8 @@
   <tr>
     <td align="center" valign="middle">
       <!-- rotate:start -->
-      <img src="images/HK.webp" width="300" alt="Daily Profile Picture" />
-      <!-- rotate:end -->
+  <img src="images/Celeste_character_Madeline.webp" width="300" alt="Daily Profile Picture" />
+<!-- rotate:end -->
     </td>
     <td align="center" valign="middle">
       <!-- stats:start -->
