@@ -21,6 +21,7 @@ TOP_N = 8          # languages shown individually; the rest collapse into "Other
 MIN_SLICE = 0.005  # languages under 0.5% get folded into "Other"
 BAR_W = 16         # width of each bar, in characters
 MAX_NAME_W = 16    # longest language name before truncation
+PAD = "   "        # gap between the daily image and the chart, in characters
 
 STATS_BLOCK = re.compile(r"(<!-- stats:start -->)(.*?)(<!-- stats:end -->)", re.DOTALL)
 
@@ -136,20 +137,18 @@ def write_readme(lines):
             "the chart should go:\n"
             "  <!-- stats:start -->\n  <!-- stats:end -->"
         )
-    # Borderless variant: centered <samp> text art, same font as the greeting,
-    # no code-box around it. Spaces must be &nbsp; or HTML collapses them and
-    # the columns lose alignment; lines are joined on one source line so no
-    # stray whitespace can sneak between rows.
-    chart = "<br>".join(html.escape(line).replace(" ", "&nbsp;") for line in lines)
+    # Borderless chart living beside the daily image: the markers sit inside
+    # a table cell, so there is no centering wrapper of its own. Spaces must
+    # be &nbsp; or HTML collapses them and the columns lose alignment; lines
+    # join on one source line so no stray whitespace can sneak between rows.
+    chart = "<br>".join(html.escape(PAD + line).replace(" ", "&nbsp;") for line in lines)
     block = (
         "<!-- stats:start -->\n"
-        '<p align="center">\n'
-        f"  <samp>{chart}</samp>\n"
-        "</p>\n"
-        "<!-- stats:end -->\n"
+        f"        <samp>{chart}</samp>\n"
+        "        <!-- stats:end -->"
     )
     README.write_text(
-        readme[: match.start()] + block + readme[match.end() :].lstrip("\n"),
+        readme[: match.start()] + block + readme[match.end() :],
         encoding="utf-8",
         newline="\n",
     )
