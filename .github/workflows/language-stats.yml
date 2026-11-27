@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Generate language distribution
+      - name: Generate language stats
         env:
           GH_PAT: ${{ secrets.GH_PAT }} # Fine-grained token: all repos, Metadata read-only
         run: python scripts/language_stats.py
@@ -28,5 +28,5 @@ jobs:
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: update language distribution chart"
-          file_pattern: images/language-distribution.svg
+          commit_message: "chore: update language stats"
+          file_pattern: README.md

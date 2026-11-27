@@ -1,24 +1,28 @@
-"""Generate images/language-distribution.svg from all of your GitHub repos.
+"""Render your GitHub language distribution as ASCII art inside README.md.
 
-Queries the GraphQL API as the token's owner, so private repos are included
-too. Only aggregate language names + percentages end up in the SVG - never
-repo names or code. The token is read from the GH_PAT environment variable
-(fine-grained PAT, "All repositories", Metadata: read-only).
+Queries the GraphQL API as the token's owner. By default only public repos
+count; pass --include-private to count private repos too. Only aggregate
+language names + percentages end up in the README - never repo names or
+code. The token is read from the GH_PAT environment variable (fine-grained
+PAT, "All repositories", Metadata: read-only).
 """
 
+import argparse
 import html
 import json
-import math
 import os
+import re
 import urllib.request
 from pathlib import Path
 
 API_URL = "https://api.github.com/graphql"
-OUTPUT = Path("images/language-distribution.svg")
+README = Path("README.md")
 TOP_N = 8          # languages shown individually; the rest collapse into "Other"
 MIN_SLICE = 0.005  # languages under 0.5% get folded into "Other"
-CHAR_W = 7.14      # 0.6em advance of the legend's monospace stack (worst case)
-FIT_MARGIN = 8     # breathing room before a legend column ends
+BAR_W = 16         # width of each bar, in characters
+MAX_NAME_W = 16    # longest language name before truncation
+
+STATS_BLOCK = re.compile(r"(<!-- stats:start -->)(.*?)(<!-- stats:end -->)", re.DOTALL)
 
 QUERY = """
 query($after: String) {
@@ -26,19 +30,14 @@ query($after: String) {
     repositories(ownerAffiliations: OWNER, first: 100, after: $after, isFork: false) {
       pageInfo { hasNextPage endCursor }
       nodes {
+        isPrivate
         languages(first: 100) {
-          edges { size node { name color } }
+          edges { size node { name } }
         }
       }
     }
   }
 }
-"""
-
-CSS = """
-text { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; }
-.t { fill: #1f2328; }
-@media (prefers-color-scheme: dark) { .t { fill: #e6edf3; } }
 """
 
 
@@ -49,7 +48,7 @@ def fetch_page(token, after=None):
         data=body,
         headers={
             "Authorization": f"Bearer {token}",
-            "User-Agent": "language-stats-svg",
+            "User-Agent": "language-stats-readme",
             "Content-Type": "application/json",
         },
         method="POST",
@@ -61,15 +60,16 @@ def fetch_page(token, after=None):
     return payload["data"]["viewer"]["repositories"]
 
 
-def collect(token):
-    """Sum language bytes across every repo owned by the token's user."""
+def collect(token, include_private):
+    """Sum language bytes across your repos (public only, unless asked)."""
     totals = {}
-    colors = {}
     after = None
     repo_count = 0
     while True:
         page = fetch_page(token, after)
         for repo in page["nodes"]:
+            if repo["isPrivate"] and not include_private:
+                continue
             edges = repo["languages"]["edges"]
             if not edges:
                 continue
@@ -77,12 +77,10 @@ def collect(token):
             for edge in edges:
                 name = edge["node"]["name"]
                 totals[name] = totals.get(name, 0) + edge["size"]
-                if edge["node"]["color"]:
-                    colors[name] = edge["node"]["color"]
         if page["pageInfo"]["hasNextPage"]:
             after = page["pageInfo"]["endCursor"]
         else:
-            return totals, colors, repo_count
+            return totals, repo_count
 
 
 def rank(totals):
@@ -103,90 +101,72 @@ def rank(totals):
     return shown
 
 
-def fit_name(name, pct_str, col_w):
-    """Truncate a name so 'name pct' fits its column (word boundary first)."""
-    budget = int((col_w - 15 - FIT_MARGIN) / CHAR_W)  # 15 = dot + gap before text
-    max_name = budget - len(pct_str) - 1  # 1 for the separating space
-    if len(name) <= max_name:
+def bar(frac):
+    """Render a fraction as a BAR_W-wide bar of blocks, padded with spaces."""
+    filled = max(round(frac * BAR_W), 1)  # at least one block so 0.x% stays visible
+    return "█" * filled + " " * (BAR_W - filled)
+
+
+def fit_name(name, width):
+    """Truncate a name so it fits its column, keeping the ellipsis tidy."""
+    if len(name) <= width:
         return name
-    cut = name[: max_name - 1].rstrip()  # room for the ellipsis
-    if " " in cut:
-        cut = cut[: cut.rindex(" ")].rstrip()
-    return cut.rstrip(" .,;:-") + "…"
+    return name[: width - 1].rstrip(" .,;:-") + "…"
 
 
-def fallback_svg(message):
-    return (
-        '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="320" '
-        'viewBox="0 0 600 320" role="img">\n'
-        f"  <style>{CSS}</style>\n"
-        f'  <text class="t" x="300" y="165" text-anchor="middle" font-size="11.9" '
-        f'opacity="0.7">{html.escape(message)}</text>\n'
-        "</svg>\n"
+def render_ascii(rankings, repo_count):
+    """Return the chart as a list of plain text lines."""
+    if not rankings:
+        return [f"languages · no data across {repo_count} repos yet"]
+    name_w = min(max(len(name) for name, _ in rankings), MAX_NAME_W)
+    lines = [f"languages · {repo_count} {'repo' if repo_count == 1 else 'repos'}"]
+    for name, frac in rankings:
+        pct = f"{frac * 100:.1f}%"
+        lines.append(f"{fit_name(name, name_w):<{name_w}}  {bar(frac)}  {pct:>6}")
+    return lines
+
+
+def write_readme(lines):
+    """Replace the text between the stats markers in README.md."""
+    readme = README.read_text(encoding="utf-8")
+    match = STATS_BLOCK.search(readme)
+    if not match:
+        raise SystemExit(
+            "stats markers not found in README.md. Add a pair of them where "
+            "the chart should go:\n"
+            "  <!-- stats:start -->\n  <!-- stats:end -->"
+        )
+    # A bare <pre> gets the same styling as a fenced code block, but unlike a
+    # fence it stays inside the centered <div>. Rows are all the same width,
+    # so centering shifts them uniformly and the columns stay aligned.
+    chart = "\n".join(html.escape(line) for line in lines)
+    block = (
+        "<!-- stats:start -->\n"
+        '<div align="center">\n'
+        "<pre>\n"
+        f"{chart}\n"
+        "</pre>\n"
+        "</div>\n"
+        "<!-- stats:end -->\n"
     )
-
-
-def stacked_bar_svg(rankings, colors, repo_count):
-    # Displayed at width=600 in the README; keep them equal so 1 SVG px = 1
-    # CSS px. The 11.9px legend text matches the size GitHub renders <samp>
-    # at on profile overview pages: 85% of its 14px markdown body.
-    width, pad = 600, 20
-    bar_y, bar_h = 24, 10
-    bar_w = width - 2 * pad
-    font_size = 11.9
-
-    def color_of(name):
-        return colors.get(name, "#8b949e")
-
-    # Language bar: proportional segments drawn inside a rounded clip path, so
-    # the ends of the bar are rounded but the edges between languages stay
-    # square - the same look as the language bar on GitHub repo pages.
-    segments, acc = [], 0.0
-    for i, (name, frac) in enumerate(rankings):
-        seg = bar_w * frac
-        if i == len(rankings) - 1:
-            seg = bar_w * (1 - acc)  # last segment absorbs rounding gaps
-        segments.append(
-            f'<rect x="{pad + bar_w * acc:.2f}" y="{bar_y}" width="{seg:.2f}" '
-            f'height="{bar_h}" fill="{color_of(name)}" />'
-        )
-        acc += frac
-
-    # Legend: dot + name + percentage, three entries per row.
-    per_row, row_h = 3, 22
-    rows = math.ceil(len(rankings) / per_row)
-    legend_top = bar_y + bar_h + 28
-    height = legend_top + rows * row_h + 6
-
-    legend = []
-    for i, (name, frac) in enumerate(rankings):
-        pct_str = f"{frac * 100:.1f}%"
-        col, row = i % per_row, i // per_row
-        x = pad + col * (bar_w / per_row)
-        y = legend_top + row * row_h
-        legend.append(
-            f'<circle cx="{x + 6:.0f}" cy="{y - 4.5:g}" r="4.5" fill="{color_of(name)}" />'
-        )
-        legend.append(
-            f'<text class="t" x="{x + 15:.0f}" y="{y}" font-size="{font_size}">'
-            f'{html.escape(fit_name(name, pct_str, bar_w / per_row))} '
-            f'<tspan opacity="0.65">{pct_str}</tspan></text>'
-        )
-
-    return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
-        f'viewBox="0 0 {width} {height}" role="img" '
-        f'aria-label="Language distribution across {repo_count} repositories">\n'
-        f"  <style>{CSS}</style>\n"
-        f'  <clipPath id="bar-clip"><rect x="{pad}" y="{bar_y}" width="{bar_w}" '
-        f'height="{bar_h}" rx="{bar_h / 2}" /></clipPath>\n'
-        f'  <g clip-path="url(#bar-clip)">\n    ' + "\n    ".join(segments) + "\n  </g>\n"
-        + "\n".join(f"  {line}" for line in legend)
-        + "\n</svg>\n"
+    README.write_text(
+        readme[: match.start()] + block + readme[match.end() :].lstrip("\n"),
+        encoding="utf-8",
+        newline="\n",
     )
 
 
 def main():
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--include-private",
+        action="store_true",
+        help="count private repos too (default: public repos only)",
+    )
+    args = parser.parse_args()
+
     token = os.environ.get("GH_PAT")
     if not token:
         raise SystemExit(
@@ -196,17 +176,12 @@ def main():
             "Actions secret (in the workflow)."
         )
 
-    totals, colors, repo_count = collect(token)
+    totals, repo_count = collect(token, args.include_private)
     rankings = rank(totals)
-    svg = (
-        stacked_bar_svg(rankings, colors, repo_count)
-        if rankings
-        else fallback_svg("No language data found across your repos yet.")
-    )
+    write_readme(render_ascii(rankings, repo_count))
 
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(svg, encoding="utf-8", newline="\n")
-    print(f"Wrote {OUTPUT} ({repo_count} repos, {len(rankings)} languages)")
+    scope = "all repos" if args.include_private else "public repos only"
+    print(f"Updated {README} ({repo_count} {scope}, {len(rankings)} languages)")
 
 
 if __name__ == "__main__":

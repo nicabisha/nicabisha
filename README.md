@@ -12,6 +12,17 @@
   </samp>
 </p>
 
-<p align="center">
-  <img src="images/language-distribution.svg?v=5" width="600" alt="Language distribution across all my repos" />
-</p>
+<!-- stats:start -->
+<div align="center">
+<pre>
+languages · 5 repos
+TypeScript    ████████████       74.7%
+Python        ██                 12.8%
+TeX           █                   8.3%
+BibTeX Style  █                   1.9%
+Makefile      █                   1.5%
+Batchfile     █                   0.6%
+Other         █                   0.2%
+</pre>
+</div>
+<!-- stats:end -->
