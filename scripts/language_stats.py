@@ -126,17 +126,6 @@ def render_ascii(rankings, repo_count):
     return lines
 
 
-def frame(lines):
-    """Cap the chart with heavy horizontal rules.
-
-    Vertical borders are not an option: stacked glyphs render dashed,
-    because the line spacing between rows (which README HTML cannot set)
-    breaks every vertical stroke. Horizontal glyph runs connect seamlessly.
-    """
-    rule = "━" * max(len(line) for line in lines)
-    return [rule] + lines + [rule]
-
-
 def write_readme(lines):
     """Replace the text between the stats markers in README.md."""
     readme = README.read_text(encoding="utf-8")
@@ -147,20 +136,18 @@ def write_readme(lines):
             "the chart should go:\n"
             "  <!-- stats:start -->\n  <!-- stats:end -->"
         )
-    # Borderless centered <samp> text art, same font as the greeting, no
-    # box around it. Spaces must be &nbsp; or HTML collapses them and the
-    # columns lose alignment; lines join on one source line so no stray
-    # whitespace can sneak between rows.
+    # Chart living in the stats cell of the character-card table: the cell
+    # centers it (align/valign on the td), so no wrapper of its own. Spaces
+    # must be &nbsp; or HTML collapses them and the columns lose alignment;
+    # lines join on one source line so no stray whitespace can sneak in.
     chart = "<br>".join(html.escape(line).replace(" ", "&nbsp;") for line in lines)
     block = (
         "<!-- stats:start -->\n"
-        '<p align="center">\n'
-        f"  <samp>{chart}</samp>\n"
-        "</p>\n"
-        "<!-- stats:end -->\n"
+        f"        <samp>{chart}</samp>\n"
+        "        <!-- stats:end -->"
     )
     README.write_text(
-        readme[: match.start()] + block + readme[match.end() :].lstrip("\n"),
+        readme[: match.start()] + block + readme[match.end() :],
         encoding="utf-8",
         newline="\n",
     )
@@ -188,7 +175,7 @@ def main():
 
     totals, repo_count = collect(token, args.include_private)
     rankings = rank(totals)
-    write_readme(frame(render_ascii(rankings, repo_count)))
+    write_readme(render_ascii(rankings, repo_count))
 
     scope = "all repos" if args.include_private else "public repos only"
     print(f"Updated {README} ({repo_count} {scope}, {len(rankings)} languages)")
